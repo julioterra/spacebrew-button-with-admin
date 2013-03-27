@@ -68,8 +68,12 @@
 			console.log("Setting up the UI listeners");
 
 			// listen to the mouse 
-			$("#buttonMsg").on("mousedown", onButtonPress);
-			$("#buttonMsg").on("mouseup", onButtonRelease);
+			$(".button").on("mousedown", function(event) {
+				onButtonPress(event);
+			});
+			$(".button").on("mouseup", function(event) {
+				onButtonRelease(event);
+			});
 
 			// if app is running on a desktop computer then set data-native-menu= to "false"
 			$(".select-subscribe-boolean").bind( "change", function(event) {
@@ -84,8 +88,8 @@
 	     * @param  {Event object} evt Holds information about the button press event
 	     */
 		function onButtonPress (evt){
-		      	console.log("[onButtonPress] button has been pressed"); 
-	        sb.send("buttonPress", "boolean", "true");
+		    console.log("[onButtonPress] button has been pressed ", evt.target.id); 
+	        sb.send(evt.target.id, "boolean", "true");
 		}
 
 		/**
@@ -93,8 +97,8 @@
 	     * @param  {Event object} evt Holds information about the button press event
 	     */
 		function onButtonRelease (evt){
-	      	console.log("[onButtonRelease] button has been released"); 
-	        sb.send("buttonPress", "boolean", "false");
+	      	console.log("[onButtonRelease] button has been released ", evt.target.id); 
+	        sb.send(evt.target.id, "boolean", "false");
 		}
 
 		/**
@@ -106,9 +110,9 @@
 		function onBooleanMessage( name, value ){
 			console.log("[onBooleanMessage] boolean message received ", value);
 			if (value) {
-		        document.body.style.background = "rgb(100,255,100)"; 
+				$(".ui-page").css("background", "rgb(100,255,100)");
 			} else {
-		        document.body.style.background = "rgb(220,220,220)"; 				
+				$(".ui-page").css("background", "rgb(220,220,220)");
 			}
 		}
 
