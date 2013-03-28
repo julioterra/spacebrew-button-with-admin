@@ -4,8 +4,10 @@
     <title>Spacebrew Button (Boolean Example)</title>
 
     <meta charset="utf-8">
-    <link rel="stylesheet" href="css/reset.css" type="text/css" media="screen" charset="utf-8" />
+	<meta name="viewport" content="width=device-width, initial-scale=1"> 
+
 	<link rel="stylesheet" href="css/jquery.mobile-1.2.0.min.css" />
+
 
 	<script type="text/javascript" src="js/jquery-1.8.2.min.js"></script>
 	<script type="text/javascript" src="js/jquery.mobile-1.2.0.min.js"></script>
@@ -67,11 +69,21 @@
 		function setupUI() {
 			console.log("Setting up the UI listeners");
 
+			var button_press_event = "mousedown"
+				, button_release_event = "mouseup";
+
+			if ($.browser.mobile) {
+				button_press_event = "touchstart"; 
+				button_release_event = "touchend"; 
+			}
+
+			console.log("Setting up the UI listeners NEW ", button_press_event);
+
 			// listen to the mouse 
-			$(".button").on("mousedown", function(event) {
+			$(".button").on(button_press_event, function(event) {
 				onButtonPress(event);
 			});
-			$(".button").on("mouseup", function(event) {
+			$(".button").on(button_release_event, function(event) {
 				onButtonRelease(event);
 			});
 
@@ -143,7 +155,7 @@
 			</div>
 
 			<div data-role="content" id="content">	
-				<label for="button1">button 1:</label>
+				<label for="button1" id="button1-label">button 1:</label>
 				<input type="button" class="button" id="button1" value="press me" data-icon="star"/>
 				<select name="select-subscribe-boolean" id="button1-select" class="select-subscribe-boolean" multiple="multiple" data-native-menu="true" data-icon="grid" data-iconpos="left">
 				    <option name="none">choose the subscribers:</option>
