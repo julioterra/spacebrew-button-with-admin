@@ -332,7 +332,7 @@ Spacebrew.Client.prototype.send = function( name, type, value ){
        }
    	};
 
-   	//console.log(message);
+   	// console.log(message);
    	this.socket.send(JSON.stringify(message));
 }
 
