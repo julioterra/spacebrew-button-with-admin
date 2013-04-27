@@ -8,17 +8,17 @@
 
 	<link rel="stylesheet" href="css/jquery.mobile-1.2.0.min.css" />
 
-
 	<script type="text/javascript" src="js/jquery-1.8.2.min.js"></script>
 	<script type="text/javascript" src="js/jquery.mobile-1.2.0.min.js"></script>
     <script type="text/javascript" src="js/mobile_detect.js"></script>
-    <script type="text/javascript" src="js/sb-1.0.4.js"></script>
-    <script type="text/javascript" src="js/sb-admin-0.0.1.js"></script>
+	<script type="text/javascript" src="js/sb-1.2.0.js"></script>
+	<script type="text/javascript" src="js/sb-admin-0.1.0.js"></script>
     <script type="text/javascript" src="js/admin_select.js"></script>
 
     <script type="text/javascript">
 
 		var sb = {}
+			, app_name = "space button"
 			, button_subs = []
 			, data_types = ["boolean"]
 			, debug = true;
@@ -36,12 +36,17 @@
 	     * setup Configure spacebrew connection and adds the mousedown listener.
 	     */
 		function setupSpacebrew (){
+			var random_id = "0000" + Math.floor(Math.random() * 10000)
+				;
+
+			app_name = app_name + ' ' + random_id.substring(random_id.length-4);
+
 			// create spacebrew client object
 			sb = new Spacebrew.Client();
 			sb.extend(Spacebrew.Admin);
 
 			// set the base description
-			sb.name("space button");
+			sb.name(app_name);
 			sb.description("This spacebrew client sends and receives boolean messages.");
 
 			// configure the publication and subscription feeds
@@ -52,6 +57,7 @@
 
 			// override Spacebrew events - this is how you catch events coming from Spacebrew
 			sb.onBooleanMessage = onBooleanMessage;
+			sb.onOpen = onOpen;
 			sb.onNewClient = onNewClient;
 			sb.onUpdateClient = onNewClient;
 			sb.onRemoveClient = onRemoveClient;
@@ -114,6 +120,17 @@
 		}
 
 		/**
+		 * Function that is called when Spacebrew connection is established
+		 */
+		function onOpen() {
+			var message = "Connected as <strong>" + sb.name() + "</strong>. ";
+			if (sb.name() === app_name) {
+				message += "<br>You can customize this app's name in the query string by adding <strong>name=your_app_name</strong>."
+			}
+			$("#name").html( message );
+		}
+
+		/**
 		 * onBooleanMessage Function that is called whenever new spacebrew boolean messages are received.
 		 *          It accepts two parameters:
 		 * @param  {String} name    Holds name of the subscription feed channel
@@ -155,22 +172,26 @@
 			</div>
 
 			<div data-role="content" id="content">	
+				<br>
+				<div id="name">Trying to connect</div>
+				<br>
+
 				<label for="button1" id="button1-label">button 1:</label>
 				<input type="button" class="button" id="button1" value="press me" data-icon="star"/>
 				<select name="select-subscribe-boolean" id="button1-select" class="select-subscribe-boolean" multiple="multiple" data-native-menu="true" data-icon="grid" data-iconpos="left">
 				    <option name="none">choose the subscribers:</option>
 				</select>
-			</div>
+			<!-- </div> -->
 
-			<div data-role="content" id="content">	
+			<!-- <div data-role="content" id="content">	 -->
 				<label for="button2">button 1:</label>
 				<input type="button" class="button" id="button2" value="press me" data-icon="star"/>
 				<select name="select-subscribe-boolean" id="button2-select" class="select-subscribe-boolean" multiple="multiple" data-native-menu="true" data-icon="grid" data-iconpos="left">
 				    <option name="none">choose the subscribers:</option>
 				</select>
-			</div>
+			<!-- </div> -->
 
-			<div data-role="content" id="content">	
+			<!-- <div data-role="content" id="content">	 -->
 				<label for="button3">button 1:</label>
 				<input type="button" class="button" id="button3" value="press me" data-icon="star"/>
 				<select name="select-subscribe-boolean" id="button3-select" class="select-subscribe-boolean" multiple="multiple" data-native-menu="true" data-icon="grid" data-iconpos="left">
